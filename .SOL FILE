@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimToken {
+
+    string public tokenName = "SimToken";
+    string public tokenAbbrv = "ST";
+    uint public totalSupply = 0;
+
+    mapping(address => uint) public balances;
+
+    // Event to be emitted on minting tokens
+    event Mint(address indexed to, uint amount);
+    
+    // Event to be emitted on burning tokens
+    event Burn(address indexed from, uint amount);
+
+    // Mint function to create new tokens
+    function mint(address _to, uint _amount) public {
+        totalSupply += _amount;
+        balances[_to] += _amount;
+        emit Mint(_to, _amount); // Emitting mint event
+    }
+
+    // Burn function to destroy tokens
+    function burn(address _from, uint _amount) public {
+        require(balances[_from] >= _amount, "Not enough balance to burn");
+        totalSupply -= _amount;
+        balances[_from] -= _amount;
+        emit Burn(_from, _amount); // Emitting burn event
+    }
+}
